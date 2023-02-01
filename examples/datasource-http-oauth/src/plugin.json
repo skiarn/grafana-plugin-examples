@@ -1,0 +1,60 @@
+{
+  "$schema": "https://raw.githubusercontent.com/grafana/grafana/master/docs/sources/developers/plugins/plugin.schema.json",
+  "type": "datasource",
+  "name": "HTTP-oauth",
+  "id": "example-http-datasource-oauth",
+  "metrics": true,
+  "info": {
+    "description": "",
+    "author": {
+      "name": "Grafana Labs",
+      "url": "https://grafana.com"
+    },
+    "keywords": ["example"],
+    "logos": {
+      "small": "img/logo.svg",
+      "large": "img/logo.svg"
+    },
+    "links": [
+      {
+        "name": "Website",
+        "url": "https://github.com/grafana/grafana-plugin-examples"
+      },
+      {
+        "name": "License",
+        "url": "https://github.com/grafana/grafana-plugin-examples/blob/master/LICENSE"
+      }
+    ],
+    "screenshots": [],
+    "version": "%VERSION%",
+    "updated": "%TODAY%"
+  },
+  "dependencies": {
+    "grafanaDependency": ">=9.1.2",
+    "plugins": []
+  },
+  "routes": [
+    {
+      "path": "api",
+      "url": "{{ .JsonData.defaultUrl }}/v1",
+      "headers": [
+        {
+          "name": "Authorization",
+          "content": "Bearer {{ .SecureJsonData.apiKey }}"
+        }
+      ]
+    },
+    {
+      "path": "api",
+      "url": "{{ .JsonData.defaultUrl }}/v1",
+      "tokenAuth": {
+        "url": "{{ .JsonData.defaultUrl }}/token",
+        "params": {
+          "grant_type": "password",
+          "username": "{{ .SecureJsonData.basicAuthUser }}",
+          "password": "{{ .SecureJsonData.basicAuthPassword }}"
+        }
+      }
+    }
+  ]
+}
